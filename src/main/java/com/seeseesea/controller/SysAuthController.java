@@ -41,7 +41,6 @@ public class SysAuthController {
     public BaseResponse<String> post(@RequestBody LoginRequest request) throws JsonProcessingException {
         String token = sysAuthService.loginByEmail(request.getIdentifier(), request.getAccessToken());
         return BaseResponse.ok(token);
-
     }
 
 }
