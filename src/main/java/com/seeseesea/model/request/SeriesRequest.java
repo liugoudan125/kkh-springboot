@@ -1,20 +1,14 @@
-package com.seeseesea.model;
+package com.seeseesea.model.request;
 
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
-
 
 /**
- * 留言板表(MessageBoard)表实体类
+ * 文章专栏表(Series)表实体类
  *
  * @author liuchenglong
  * @since 2025-07-18 17:08:58
@@ -23,20 +17,32 @@ import java.time.LocalDateTime;
 @Getter
 @ToString
 @EqualsAndHashCode(callSuper = false)
-public class MessageBoardRequest {
+public class SeriesRequest {
 
     /**
      * 主键ID
      **/
     private String id;
     /**
-     * 留言板名称
+     * 专栏名称
      **/
     private String name;
     /**
-     * 留言板描述
+     * 专栏描述
      **/
     private String description;
+    /**
+     * 封面图片URL
+     **/
+    private String coverImage;
+    /**
+     * 作者ID
+     **/
+    private Long authorId;
+    /**
+     * 文章数量
+     **/
+    private Integer articleCount;
     /**
      * 状态：active-启用，inactive-禁用
      **/

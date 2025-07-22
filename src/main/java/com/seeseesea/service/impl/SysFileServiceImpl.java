@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.f4b6a3.uuid.UuidCreator;
 import com.seeseesea.core.config.S3Properties;
 import com.seeseesea.core.utils.BeanCopyUtils;
+import com.seeseesea.core.utils.UserUtils;
 import com.seeseesea.dao.SysFileDao;
 import com.seeseesea.model.SysFile;
 import com.seeseesea.model.SysFileDTO;
@@ -43,7 +44,7 @@ public class SysFileServiceImpl implements SysFileService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public List<SysFileDTO> uploadFiles(List<MultipartFile> files, String uploadUserId) {
+    public List<SysFileDTO> uploadFiles(List<MultipartFile> files) {
         try {
             List<SysFile> sysFiles = new ArrayList<>();
             for (MultipartFile file : files) {
@@ -59,10 +60,8 @@ public class SysFileServiceImpl implements SysFileService {
                 sysFile.setBucket(s3Properties.getBucket());
                 sysFile.setObjectKey(key);
                 sysFile.setOssUrl(fileUrl);
-                sysFile.setUploadUserId(uploadUserId);
+                sysFile.setUploadUserId(UserUtils.getUserId());
                 sysFile.setUploadAt(LocalDateTime.now());
-                sysFile.setCreatedAt(LocalDateTime.now());
-                sysFile.setUpdatedAt(LocalDateTime.now());
                 sysFiles.add(sysFile);
             }
             // 批量插入文件记录

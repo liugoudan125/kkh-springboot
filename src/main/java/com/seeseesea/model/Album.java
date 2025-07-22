@@ -85,5 +85,9 @@ public class Album {
     @TableField(value = "updated_at", fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updatedAt;
 
+    public interface Status {
+        String ACTIVE = "ACTIVE";
+        String INACTIVE = "INACTIVE";
+    }
 }
 

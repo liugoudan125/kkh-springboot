@@ -19,10 +19,9 @@ public interface SysFileService {
      * 上传文件
      *
      * @param files         文件
-     * @param uploadUserId 上传用户ID
      * @return 文件信息
      */
-    List<SysFileDTO> uploadFiles(List<MultipartFile> files, String uploadUserId);
+    List<SysFileDTO> uploadFiles(List<MultipartFile> files);
 
     /**
      * 分页查询文件列表

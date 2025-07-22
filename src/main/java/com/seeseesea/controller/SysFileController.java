@@ -27,14 +27,14 @@ public class SysFileController {
     /**
      * 批量上传文件接口
      *
-     * @param files        文件
+     * @param files 文件
      * @return 文件信息
      */
     @PostMapping("/upload_batch")
     public BaseResponse<List<SysFileDTO>> uploadFile(
             @RequestParam("files") List<MultipartFile> files) {
         // 如果没有提供uploadUserId，使用默认值
-        List<SysFileDTO> sysFiles = sysFileService.uploadFiles(files, UserUtils.getUserId());
+        List<SysFileDTO> sysFiles = sysFileService.uploadFiles(files);
         return BaseResponse.ok(sysFiles);
     }
 

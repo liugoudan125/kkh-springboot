@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.seeseesea.core.page.PageParams;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,13 +18,13 @@ import java.time.LocalDateTime;
  * 相册照片表(AlbumPhoto)表实体类
  *
  * @author liuchenglong
- * @since 2025-07-18 17:08:55
+ * @since 2025-07-22 16:11:20
  */
 @Setter
 @Getter
 @ToString
 @EqualsAndHashCode(callSuper = false)
-public class AlbumPhotoRequest {
+public class AlbumPhotoRequest extends PageParams {
 
     /**
      * 主键ID
@@ -45,22 +46,6 @@ public class AlbumPhotoRequest {
      * 图片URL
      **/
     private String imageUrl;
-    /**
-     * 缩略图URL
-     **/
-    private String thumbnailUrl;
-    /**
-     * 文件大小（字节）
-     **/
-    private Long fileSize;
-    /**
-     * 图片宽度
-     **/
-    private Integer width;
-    /**
-     * 图片高度
-     **/
-    private Integer height;
     /**
      * 排序权重
      **/

@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -65,7 +66,7 @@ public class SecurityConfig {
                         writeResponse(response, baseResponse);
                     });
                 })
-                .addFilterAt((ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) -> {
+                .addFilterAt((servletRequest, servletResponse, filterChain) -> {
                     HttpServletRequest request = (HttpServletRequest) servletRequest;
                     String token = request.getHeader("token");
                     if (StringUtils.isNoneBlank(token)) {
@@ -74,12 +75,9 @@ public class SecurityConfig {
                         if (StringUtils.isNotBlank(userJsonStr)) {
                             SysUserDTO sysUserDTO = JsonUtils.fromJsonString(userJsonStr, SysUserDTO.class);
                             SecurityContextHolder.getContext()
-                                    .setAuthentication(new Authentication() {
-                                        private boolean authenticated = true;
-
-                                        @Override
-                                        public Collection<? extends GrantedAuthority> getAuthorities() {
-                                            return List.of();
+                                    .setAuthentication(new AbstractAuthenticationToken(List.of()) {
+                                        {
+                                            super.setAuthenticated(true);
                                         }
 
                                         @Override
@@ -88,28 +86,8 @@ public class SecurityConfig {
                                         }
 
                                         @Override
-                                        public Object getDetails() {
-                                            return null;
-                                        }
-
-                                        @Override
                                         public Object getPrincipal() {
                                             return sysUserDTO;
-                                        }
-
-                                        @Override
-                                        public boolean isAuthenticated() {
-                                            return authenticated;
-                                        }
-
-                                        @Override
-                                        public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
-                                            this.authenticated = isAuthenticated;
-                                        }
-
-                                        @Override
-                                        public String getName() {
-                                            return sysUserDTO.getNickname();
                                         }
                                     });
 
@@ -120,14 +98,6 @@ public class SecurityConfig {
                 }, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
-
-//    @Bean
-//    public WebSecurityCustomizer webSecurityCustomizer() {
-//        return web -> {
-//            web.ignoring()
-//                    .requestMatchers("/sys/login", "/sys/register", "/sys/logout", "/actuator/**", "/druid/**");
-//        };
-//    }
 
     private void writeResponse(HttpServletResponse response, BaseResponse<Void> baseResponse) throws IOException {
         response.setContentType("application/json;charset=UTF-8");

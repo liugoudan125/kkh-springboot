@@ -1,40 +1,37 @@
-package com.seeseesea.model;
+package com.seeseesea.model.request;
 
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
+import com.seeseesea.core.page.PageParams;
+import jakarta.validation.constraints.NotBlank;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
-
 
 /**
- * 文章专栏表(Series)表实体类
+ * 相册表(Album)表实体类
  *
  * @author liuchenglong
- * @since 2025-07-18 17:08:58
+ * @since 2025-07-18 17:08:54
  */
 @Setter
 @Getter
 @ToString
 @EqualsAndHashCode(callSuper = false)
-public class SeriesRequest {
+public class AlbumRequest extends PageParams {
 
     /**
      * 主键ID
      **/
     private String id;
     /**
-     * 专栏名称
+     * 相册名称
      **/
+    @NotBlank(message = "相册名称不能为空", groups = {add.class})
     private String name;
     /**
-     * 专栏描述
+     * 相册描述
      **/
     private String description;
     /**
@@ -42,16 +39,24 @@ public class SeriesRequest {
      **/
     private String coverImage;
     /**
-     * 作者ID
+     * 创建者ID
      **/
-    private Long authorId;
+    private String authorId;
     /**
-     * 文章数量
+     * 照片数量
      **/
-    private Integer articleCount;
+    private Integer photoCount;
+    /**
+     * 浏览次数
+     **/
+    private Long viewCount;
     /**
      * 状态：active-启用，inactive-禁用
      **/
     private String status;
+
+    public interface add {
+    }
+
 }
 

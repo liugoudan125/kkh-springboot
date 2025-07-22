@@ -2,6 +2,11 @@ package com.seeseesea.dao;
 
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
+import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.seeseesea.model.AlbumPhotoRequest;
 import org.apache.ibatis.annotations.Param;
 import com.seeseesea.model.AlbumPhoto;
 import org.apache.ibatis.annotations.Mapper;
@@ -15,5 +20,26 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface AlbumPhotoDao extends BaseMapper<AlbumPhoto> {
 
+    default void deleteByAlbumIdAndPhotoId(String albumId, String photoId) {
+        new LambdaUpdateChainWrapper<>(this)
+                .eq(AlbumPhoto::getId, photoId)
+                .eq(AlbumPhoto::getAlbumId, albumId)
+                .remove();
+    }
+
+    default void updateByAlbumIdAndId(AlbumPhoto albumPhoto) {
+        new LambdaUpdateChainWrapper<>(this)
+                .eq(AlbumPhoto::getId, albumPhoto.getId())
+                .eq(AlbumPhoto::getAlbumId, albumPhoto.getAlbumId())
+                .update(albumPhoto);
+    }
+
+    default IPage<AlbumPhoto> page(AlbumPhotoRequest request) {
+        return new LambdaQueryChainWrapper<>(this)
+                .eq(AlbumPhoto::getAlbumId, request.getAlbumId())
+                .orderByAsc(AlbumPhoto::getSortOrder)
+                .orderByDesc(AlbumPhoto::getCreatedAt)
+                .page(Page.of(request.getCurrent(), request.getSize()));
+    }
 }
 

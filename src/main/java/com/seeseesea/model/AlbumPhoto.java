@@ -55,29 +55,6 @@ public class AlbumPhoto {
     @TableField(value = "image_url")
     private String imageUrl;
 
-    /**
-     * 缩略图URL
-     **/
-    @TableField(value = "thumbnail_url")
-    private String thumbnailUrl;
-
-    /**
-     * 文件大小（字节）
-     **/
-    @TableField(value = "file_size")
-    private Long fileSize;
-
-    /**
-     * 图片宽度
-     **/
-    @TableField(value = "width")
-    private Integer width;
-
-    /**
-     * 图片高度
-     **/
-    @TableField(value = "height")
-    private Integer height;
 
     /**
      * 排序权重

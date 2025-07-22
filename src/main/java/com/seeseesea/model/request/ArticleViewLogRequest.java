@@ -1,10 +1,6 @@
-package com.seeseesea.model;
+package com.seeseesea.model.request;
 
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;

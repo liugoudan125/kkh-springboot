@@ -51,26 +51,6 @@ public class AlbumPhotoDTO {
     private String imageUrl;
 
     /**
-     * 缩略图URL
-     **/
-    private String thumbnailUrl;
-
-    /**
-     * 文件大小（字节）
-     **/
-    private Long fileSize;
-
-    /**
-     * 图片宽度
-     **/
-    private Integer width;
-
-    /**
-     * 图片高度
-     **/
-    private Integer height;
-
-    /**
      * 排序权重
      **/
     private Integer sortOrder;

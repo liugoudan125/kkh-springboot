@@ -8,10 +8,6 @@
         <result property="title" column="title" jdbcType="VARCHAR"/>
         <result property="description" column="description" jdbcType="VARCHAR"/>
         <result property="imageUrl" column="image_url" jdbcType="VARCHAR"/>
-        <result property="thumbnailUrl" column="thumbnail_url" jdbcType="VARCHAR"/>
-        <result property="fileSize" column="file_size" jdbcType="INTEGER"/>
-        <result property="width" column="width" jdbcType="INTEGER"/>
-        <result property="height" column="height" jdbcType="INTEGER"/>
         <result property="sortOrder" column="sort_order" jdbcType="INTEGER"/>
         <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
         <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>

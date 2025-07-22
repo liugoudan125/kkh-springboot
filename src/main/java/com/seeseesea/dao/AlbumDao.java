@@ -1,8 +1,13 @@
 package com.seeseesea.dao;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.apache.ibatis.annotations.Param;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
+import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.seeseesea.model.request.AlbumRequest;
 import com.seeseesea.model.Album;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -15,5 +20,20 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface AlbumDao extends BaseMapper<Album> {
 
+    default IPage<Album> page(AlbumRequest request) {
+
+        return new LambdaQueryChainWrapper<>(this)
+                .like(request.getName() != null, Album::getName, request.getName())
+                .eq(request.getStatus() != null, Album::getStatus, request.getStatus())
+                .orderByDesc(Album::getCreatedAt)
+                .page(Page.of(request.getCurrent(), request.getSize()));
+    }
+
+    default void updatePhotoCount(String albumId, int size) {
+        new LambdaUpdateChainWrapper<>(this)
+                .setIncrBy(Album::getPhotoCount, size)
+                .eq(Album::getId, albumId)
+                .update();
+    }
 }
 
