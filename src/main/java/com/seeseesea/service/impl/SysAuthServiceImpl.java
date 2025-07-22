@@ -39,7 +39,7 @@ public class SysAuthServiceImpl implements SysAuthService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void register(RegisterRequest request) {
+    public void registerByEmail(RegisterRequest request) {
         SysLoginMethodDTO sysLoginMethodDTO = sysLoginMethodService.getByIdentifierAndMethodType(request.getIdentifier(), LoginMethodType.EMAIL);
         if (sysLoginMethodDTO == null) {
             SysUser sysUser = new SysUser();
@@ -55,7 +55,23 @@ public class SysAuthServiceImpl implements SysAuthService {
     }
 
     @Override
-    public String loginByEmail(String identifier, String accessToken) throws JsonProcessingException {
+    public void registerByUsername(RegisterRequest request) {
+        SysLoginMethodDTO sysLoginMethodDTO = sysLoginMethodService.getByIdentifierAndMethodType(request.getIdentifier(), LoginMethodType.USERNAME);
+        if (sysLoginMethodDTO == null) {
+            SysUser sysUser = new SysUser();
+            sysUser.setNickname(request.getNickname());
+            sysUserService.save(sysUser);
+            SysLoginMethod sysLoginMethod = new SysLoginMethod();
+            sysLoginMethod.setUserId(sysUser.getId());
+            sysLoginMethod.setIdentifier(request.getIdentifier());
+            sysLoginMethod.setMethodType(LoginMethodType.USERNAME);
+            sysLoginMethod.setAccessToken(passwordEncoder.encode(request.getAccessToken()));
+            sysLoginMethodService.save(sysLoginMethod);
+        }
+    }
+
+    @Override
+    public String loginByEmail(String identifier, String accessToken) {
         SysLoginMethodDTO sysLoginMethodDTO = sysLoginMethodService
                 .getByIdentifierAndMethodType(identifier, LoginMethodType.EMAIL);
         if (sysLoginMethodDTO == null) {
@@ -64,9 +80,30 @@ public class SysAuthServiceImpl implements SysAuthService {
         if (!passwordEncoder.matches(accessToken, sysLoginMethodDTO.getAccessToken())) {
             throw new RuntimeException("密码错误");
         }
-        SysUserDTO sysUserDTO = sysUserService.getById(sysLoginMethodDTO.getUserId());
         String token = UUID.randomUUID().toString();
-        stringRedisTemplate.opsForValue().set(RedisKeys.USER_TOKEN_KEY.generate(token), JsonUtils.toJsonString(sysUserDTO), Duration.ofDays(1));
+        setUserRedisCache(sysLoginMethodDTO.getUserId(), token);
         return token;
+    }
+
+    @Override
+    public String loginByUsername(String identifier, String accessToken) {
+        SysLoginMethodDTO sysLoginMethodDTO = sysLoginMethodService
+                .getByIdentifierAndMethodType(identifier, LoginMethodType.USERNAME);
+        if (sysLoginMethodDTO == null) {
+            throw new RuntimeException("该用户名不存在");
+        }
+        if (!passwordEncoder.matches(accessToken, sysLoginMethodDTO.getAccessToken())) {
+            throw new RuntimeException("密码错误");
+        }
+        String token = UUID.randomUUID().toString();
+        setUserRedisCache(sysLoginMethodDTO.getUserId(), token);
+        return token;
+    }
+
+    private void setUserRedisCache(String userId, String token) {
+        SysUserDTO sysUserDTO = sysUserService.getById(userId);
+        sysUserDTO.setAuthorities(sysUserService.listRoleByUserId(sysUserDTO.getId()));
+        sysUserDTO.setAuthenticated(true);
+        stringRedisTemplate.opsForValue().set(RedisKeys.USER_TOKEN_KEY.generate(token), JsonUtils.toJsonString(sysUserDTO), Duration.ofDays(1));
     }
 }

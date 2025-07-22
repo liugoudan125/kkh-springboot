@@ -1,13 +1,12 @@
 package com.seeseesea.core.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seeseesea.core.constants.RedisKeys;
 import com.seeseesea.core.response.BaseResponse;
 import com.seeseesea.core.utils.JsonUtils;
+import com.seeseesea.model.SysRoleDTO;
 import com.seeseesea.model.SysUserDTO;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
+import com.seeseesea.service.SysRoleService;
+import com.seeseesea.service.SysUserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -18,10 +17,9 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,7 +28,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import java.io.IOException;
 import java.time.Duration;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -42,6 +39,9 @@ import java.util.List;
 public class SecurityConfig {
 
     private final StringRedisTemplate stringRedisTemplate;
+
+    private final SysRoleService sysRoleService;
+    private final SysUserService sysUserService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -75,22 +75,7 @@ public class SecurityConfig {
                         if (StringUtils.isNotBlank(userJsonStr)) {
                             SysUserDTO sysUserDTO = JsonUtils.fromJsonString(userJsonStr, SysUserDTO.class);
                             SecurityContextHolder.getContext()
-                                    .setAuthentication(new AbstractAuthenticationToken(List.of()) {
-                                        {
-                                            super.setAuthenticated(true);
-                                        }
-
-                                        @Override
-                                        public Object getCredentials() {
-                                            return null;
-                                        }
-
-                                        @Override
-                                        public Object getPrincipal() {
-                                            return sysUserDTO;
-                                        }
-                                    });
-
+                                    .setAuthentication(sysUserDTO);
                         }
                     }
                     filterChain.doFilter(servletRequest, servletResponse);
@@ -104,4 +89,5 @@ public class SecurityConfig {
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(JsonUtils.toJsonString(baseResponse));
     }
+
 }

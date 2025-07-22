@@ -7,16 +7,81 @@
 -- 博客用户表
 CREATE TABLE IF NOT EXISTS `sys_user`
 (
-    `id`           char(36)    NOT NULL COMMENT '主键ID',
-    `nickname`     varchar(50) NOT NULL COMMENT '昵称',
-    `avatar`       varchar(500)         DEFAULT NULL COMMENT '头像URL',
-    `introduction` varchar(500)         DEFAULT NULL COMMENT '个人简介',
-    `created_at`   datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `updated_at`   datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后更新时间',
-    PRIMARY KEY (`id`)
+    `id`           char(36)     NOT NULL COMMENT 'id',
+    `nickname`     varchar(255) NOT NULL COMMENT '昵称（默认账户名）',
+    `avatar`       varchar(255) DEFAULT NULL COMMENT '头像',
+    `introduction` varchar(255) DEFAULT NULL COMMENT '简介',
+    `created_at`   datetime     NOT NULL COMMENT '创建时间',
+    `updated_at`   datetime     NOT NULL COMMENT '更新时间',
+    PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_unicode_ci COMMENT ='博客用户表';
+  COLLATE = utf8mb4_general_ci comment '用户表';
+
+CREATE TABLE IF NOT EXISTS `sys_login_method`
+(
+    `id`           char(36)     NOT NULL,
+    `user_id`      char(36)     NOT NULL COMMENT '用户ID',
+    `method_type`  varchar(50)  NOT NULL COMMENT '登录方式(''email'',''username'',''github'',''wechat'',''gitee''）',
+    `identifier`   varchar(255) NOT NULL COMMENT '邮箱、用户名、第三方平台用户ID',
+    `access_token` varchar(255) DEFAULT NULL COMMENT '密码，access_token',
+    `expires_at`   datetime     DEFAULT NULL COMMENT '如果第三方平台登录，令牌的过期时间',
+    `created_at`   datetime     NOT NULL COMMENT '创建时间',
+    `updated_at`   datetime     NOT NULL COMMENT '更新时间',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE KEY `uk_identifer&methodType` (`method_type`, `identifier`) USING BTREE
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT ='登录方式表';
+
+CREATE TABLE IF NOT EXISTS `sys_role`
+(
+    `id`          char(36)    NOT NULL COMMENT '角色ID',
+    `name`        varchar(50) NOT NULL COMMENT '角色名称',
+    `code`        varchar(50) NOT NULL COMMENT '角色名称',
+    `description` varchar(255) DEFAULT NULL COMMENT '角色描述',
+    `created_at`  datetime    NOT NULL COMMENT '创建时间',
+    `updated_at`  datetime    NOT NULL COMMENT '更新时间',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE KEY `uk_name` (`name`) USING BTREE
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT ='角色表';
+
+CREATE TABLE IF NOT EXISTS `sys_user_role`
+(
+    `id`         char(36) NOT NULL COMMENT '主键ID',
+    `user_id`    char(36) NOT NULL COMMENT '用户ID',
+    `role_id`    char(36) NOT NULL COMMENT '角色ID',
+    `created_at` datetime NOT NULL COMMENT '创建时间',
+    `updated_at` datetime NOT NULL COMMENT '更新时间',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE KEY `uk_user_role` (`user_id`, `role_id`) USING BTREE,
+    KEY `idx_user_id` (`user_id`) USING BTREE,
+    KEY `idx_role_id` (`role_id`) USING BTREE
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT ='用户角色关联表';
+
+
+INSERT INTO `sys_user` (`id`, `nickname`, `avatar`, `introduction`, `created_at`, `updated_at`)
+VALUES ('019818d0-238f-76bd-aa6d-22c2553b050c', '管理员', NULL, '系统管理员', NOW(), NOW());
+
+INSERT INTO `sys_login_method` (`id`, `user_id`, `method_type`, `identifier`, `access_token`, `expires_at`,
+                                `created_at`, `updated_at`)
+VALUES ('019818d0-2455-7cd0-8d78-87fedea184f4', '019818d0-238f-76bd-aa6d-22c2553b050c', 'username',
+        'admin', '$2a$10$9Ul0Zi6cgyg6dyaX9zRuMOnvoraXakqTRbjNsOyWukAaQDVdlvSQK', NULL,
+        NOW(), NOW());
+
+INSERT INTO `sys_role` (`id`, `name`, `code`, `description`, `created_at`, `updated_at`)
+values ('0198322d-668c-71c7-9517-cb4ee4905478', '管理员', 'admin', '系统管理员角色，拥有所有权限', NOW(), NOW()),
+       ('0198322d-668c-71c7-9517-cb4ee4905479', '用户', 'user', '普通访客角色，权限受限', NOW(), NOW()),
+       ('0198322d-668c-71c7-9517-cb4ee4905480', '访客', 'guest', '未登录用户角色，权限最小', NOW(), NOW());
+
+INSERT INTO `sys_user_role` (`id`, `user_id`, `role_id`, `created_at`, `updated_at`)
+values ('0198322d-668c-71c7-9517-cb4ee4905478', '019818d0-238f-76bd-aa6d-22c2553b050c',
+        '0198322d-668c-71c7-9517-cb4ee4905478', NOW(), NOW());
+
 
 -- ==================== 文章相关表 ====================
 

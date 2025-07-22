@@ -3,11 +3,15 @@ package com.seeseesea.service.impl;
 
 import com.seeseesea.core.utils.BeanCopyUtils;
 import com.seeseesea.dao.SysUserDao;
+import com.seeseesea.model.SysRole;
+import com.seeseesea.model.SysRoleDTO;
 import com.seeseesea.model.SysUser;
 import com.seeseesea.model.SysUserDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.seeseesea.service.SysUserService;
+
+import java.util.List;
 
 /**
  * (SysUser)业务层接口实现类
@@ -33,5 +37,11 @@ public class SysUserServiceImpl implements SysUserService {
             return null;
         }
         return BeanCopyUtils.copy(sysUser, SysUserDTO::new);
+    }
+
+    @Override
+    public List<SysRoleDTO> listRoleByUserId(String userId) {
+        List<SysRole> sysRoleList = sysUserDao.listRoleByUserId(userId);
+        return BeanCopyUtils.copyList(sysRoleList, SysRoleDTO.class);
     }
 }

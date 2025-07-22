@@ -5,12 +5,18 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
 
 
 /**
@@ -23,7 +29,7 @@ import java.time.LocalDateTime;
 @Getter
 @ToString
 @EqualsAndHashCode(callSuper = false)
-public class SysUserDTO {
+public class SysUserDTO implements Authentication {
 
     /**
      * id
@@ -55,5 +61,47 @@ public class SysUserDTO {
      **/
     private LocalDateTime updatedAt;
 
+    /**
+     * 角色列表
+     */
+    private List<SysRoleDTO> authorities;
+
+    private boolean authenticated;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return authorities;
+    }
+
+    @Override
+    public Object getCredentials() {
+        return null;
+    }
+
+    @Override
+    public Object getDetails() {
+        return null;
+    }
+
+    @Override
+    @JsonIgnore
+    public Object getPrincipal() {
+        return this;
+    }
+
+    @Override
+    public boolean isAuthenticated() {
+        return authenticated;
+    }
+
+    @Override
+    public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
+        this.authenticated = isAuthenticated;
+    }
+
+    @Override
+    public String getName() {
+        return nickname;
+    }
 }
 

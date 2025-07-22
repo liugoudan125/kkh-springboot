@@ -1,7 +1,10 @@
 package com.seeseesea.service;
 
+import com.seeseesea.model.SysRoleDTO;
 import com.seeseesea.model.SysUser;
 import com.seeseesea.model.SysUserDTO;
+
+import java.util.List;
 
 /**
  * (SysUser)业务层接口
@@ -14,4 +17,7 @@ public interface SysUserService {
     void save(SysUser sysUser);
 
     SysUserDTO getById(String userId);
+
+    List<SysRoleDTO> listRoleByUserId(String userId);
+
 }

@@ -8,7 +8,11 @@ import com.seeseesea.model.request.RegisterRequest;
  */
 public interface SysAuthService {
 
-    void register(RegisterRequest request);
+    void registerByEmail(RegisterRequest request);
 
     String loginByEmail(String identifier, String accessToken) throws JsonProcessingException;
+
+    String loginByUsername(String identifier, String accessToken);
+
+    void registerByUsername(RegisterRequest request);
 }
