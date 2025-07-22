@@ -50,15 +50,6 @@ public class AlbumDTO {
      **/
     private String authorId;
 
-    /**
-     * 照片数量
-     **/
-    private Integer photoCount;
-
-    /**
-     * 浏览次数
-     **/
-    private Long viewCount;
 
     /**
      * 状态：active-启用，inactive-禁用

@@ -2,7 +2,7 @@ package com.seeseesea.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.f4b6a3.uuid.UuidCreator;
-import com.seeseesea.core.config.S3Properties;
+import com.seeseesea.core.config.OssProperties;
 import com.seeseesea.core.utils.BeanCopyUtils;
 import com.seeseesea.core.utils.UserUtils;
 import com.seeseesea.dao.SysFileDao;
@@ -15,16 +15,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
-import software.amazon.awssdk.core.sync.RequestBody;
-import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
 /**
  * (SysFile)业务层接口实现类
@@ -38,7 +37,7 @@ import java.util.UUID;
 public class SysFileServiceImpl implements SysFileService {
 
     private final S3Service s3Service;
-    private final S3Properties s3Properties;
+    private final OssProperties ossProperties;
     private final SysFileDao sysFileDao;
 
 
@@ -49,15 +48,28 @@ public class SysFileServiceImpl implements SysFileService {
             List<SysFile> sysFiles = new ArrayList<>();
             for (MultipartFile file : files) {
                 String originalFilename = file.getOriginalFilename();
-                String key = getFileKey(originalFilename);
-                String fileUrl = s3Service.uploadFile(file, key);
-                log.info("上传成功，地址：{}", fileUrl);
+                String fileDigest = DigestUtils.md5DigestAsHex(file.getInputStream());
+                long fileSize = file.getSize();
+                // 检查文件是否已存在
+                String fileUrl;
+                String key;
+                SysFile existingFile = sysFileDao.selectByDigestAndSize(fileDigest, fileSize);
+                if (existingFile == null) {
+                    key = getFileKey(originalFilename);
+                    fileUrl = s3Service.uploadFile(file, key);
+                    log.info("上传成功：{}，地址：{}", originalFilename, fileUrl);
+                } else {
+                    fileUrl = existingFile.getOssUrl();
+                    key = existingFile.getObjectKey();
+                    log.info("文件已存在，跳过上传：{}", originalFilename);
+                }
                 // 创建文件记录
                 SysFile sysFile = new SysFile();
                 sysFile.setFileName(originalFilename);
                 sysFile.setFileSize(file.getSize());
+                sysFile.setFileDigest(fileDigest);
                 sysFile.setMimeType(file.getContentType());
-                sysFile.setBucket(s3Properties.getBucket());
+                sysFile.setBucket(ossProperties.getBucket());
                 sysFile.setObjectKey(key);
                 sysFile.setOssUrl(fileUrl);
                 sysFile.setUploadUserId(UserUtils.getUserId());
@@ -152,9 +164,12 @@ public class SysFileServiceImpl implements SysFileService {
         return dtoPage;
     }
 
+    private final static DateTimeFormatter pathFormatter = DateTimeFormatter.ofPattern("yyyy/ww");
+
     private String getFileKey(String originalFilename) {
         String extension = originalFilename != null ?
                 originalFilename.substring(originalFilename.lastIndexOf(".")) : "";
-        return s3Properties.getPath() + "/" + UuidCreator.getTimeOrderedEpoch().toString().replaceAll("-", "") + extension;
+        return LocalDate.now().format(pathFormatter) + "/" + UuidCreator.getTimeOrderedEpoch().toString().replaceAll("-", "") + extension;
     }
+
 }

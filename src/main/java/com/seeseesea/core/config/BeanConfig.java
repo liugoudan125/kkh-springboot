@@ -32,39 +32,21 @@ public class BeanConfig {
      * S3Client的Bean
      */
     @Bean(name = "s3Client")
-    public S3Client s3Client(S3Properties s3Properties) {
+    public S3Client s3Client(OssProperties ossProperties) {
 
         // 创建认证信息
         AwsBasicCredentials awsCredentials = AwsBasicCredentials.create(
-                s3Properties.getAccessKey(),
-                s3Properties.getSecretKey()
+                ossProperties.getAccessKey(),
+                ossProperties.getSecretKey()
         );
         StaticCredentialsProvider credentialsProvider = StaticCredentialsProvider.create(awsCredentials);
 
         // 构建S3Client
         return S3Client.builder()
                 .credentialsProvider(credentialsProvider)
-                .region(Region.of(s3Properties.getRegion()))
-                .endpointOverride(URI.create(s3Properties.getEndpoint()))
-                .forcePathStyle(s3Properties.getForcePathStyle()).build();
-    }
-
-
-    @Bean
-    public ServletRegistrationBean<StatViewServlet> statViewServlet() {
-        ServletRegistrationBean<StatViewServlet> bean = new ServletRegistrationBean<>(new StatViewServlet(), "/druid/*");
-        bean.addInitParameter("loginUsername", "admin");
-        bean.addInitParameter("loginPassword", "123456");
-        bean.addInitParameter("resetEnable", "false");
-        bean.addInitParameter("allow", "");
-        return bean;
-    }
-
-    @Bean
-    public FilterRegistrationBean<WebStatFilter> webStatFilter() {
-        FilterRegistrationBean<WebStatFilter> bean = new FilterRegistrationBean<>(new WebStatFilter());
-        bean.addUrlPatterns("/*");
-        bean.addInitParameter("exclusions", "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*");
-        return bean;
+                .region(Region.of(ossProperties.getRegion()))
+                .endpointOverride(URI.create(ossProperties.getEndpoint()))
+                .forcePathStyle(ossProperties.getForcePathStyle())
+                .build();
     }
 }

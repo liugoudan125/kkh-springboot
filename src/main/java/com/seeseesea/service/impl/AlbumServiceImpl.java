@@ -40,8 +40,6 @@ public class AlbumServiceImpl implements AlbumService {
 
         Album album = BeanCopyUtils.copy(request, Album::new);
         album.setAuthorId(UserUtils.getUserId());
-        album.setPhotoCount(0);
-        album.setViewCount(0L);
         album.setStatus(Album.Status.ACTIVE);
         albumDao.insert(album);
     }
@@ -64,6 +62,9 @@ public class AlbumServiceImpl implements AlbumService {
         if (ObjectUtils.isNotEmpty(sysFileDTOList)) {
             List<AlbumPhoto> albumPhotoList = new ArrayList<>();
             for (SysFileDTO sysFileDTO : sysFileDTOList) {
+                if (albumPhotoDao.existsByAlbumIdAndImageUrl(albumId, sysFileDTO.getOssUrl())) {
+                    continue; // 如果相册中已存在该图片，则跳过
+                }
                 AlbumPhoto photo = new AlbumPhoto();
                 photo.setAlbumId(albumId);
                 photo.setImageUrl(sysFileDTO.getOssUrl());
@@ -71,7 +72,6 @@ public class AlbumServiceImpl implements AlbumService {
                 albumPhotoList.add(photo);
             }
             albumPhotoDao.insert(albumPhotoList);
-            albumDao.updatePhotoCount(albumId, sysFileDTOList.size());
         }
     }
 

@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.seeseesea.core.utils.FileUtils;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,7 +17,7 @@ import java.time.LocalDateTime;
  * (SysFile)表实体类
  *
  * @author liuchenglong
- * @since 2025-07-03 11:25:09
+ * @since 2025-07-22 21:35:19
  */
 @Setter
 @Getter
@@ -38,7 +37,10 @@ public class SysFileDTO {
      **/
     private Long fileSize;
 
-    private String fileSizeFormatDisplay;
+    /**
+     * 文件唯一标识（MD5或SHA256）
+     **/
+    private String fileDigest;
 
     /**
      * 文件类型（如 image/jpeg,application/pdf）
@@ -54,6 +56,7 @@ public class SysFileDTO {
      * 在oss上的key
      **/
     private String objectKey;
+
     /**
      * OSS 文件存储地址
      **/
@@ -78,24 +81,6 @@ public class SysFileDTO {
      * 最后更新时间
      **/
     private LocalDateTime updatedAt;
-
-    private Boolean isImage;
-    private Boolean isAudio;
-    private Boolean isVideo;
-    private Boolean isDocument;
-
-    public void setFileSize(Long fileSize) {
-        this.fileSize = fileSize;
-        setFileSizeFormatDisplay(FileUtils.formatFileSize(fileSize));
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-        setIsImage(FileUtils.isImageFile(fileName));
-        setIsAudio(FileUtils.isAudioFile(fileName));
-        setIsVideo(FileUtils.isVideoFile(fileName));
-        setIsDocument(FileUtils.isDocumentFile(fileName));
-    }
 
 }
 

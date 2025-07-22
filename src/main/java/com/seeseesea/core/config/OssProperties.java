@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Data
 @Component
 @ConfigurationProperties(prefix = "oss.s3")
-public class S3Properties {
+public class OssProperties {
 
     /**
      * 访问密钥
@@ -43,10 +43,6 @@ public class S3Properties {
      */
     private String bucket;
 
-    /**
-     * 存储路径
-     */
-    private String path;
 
     private Boolean forcePathStyle = true;
 }

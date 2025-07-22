@@ -29,11 +29,5 @@ public interface AlbumDao extends BaseMapper<Album> {
                 .page(Page.of(request.getCurrent(), request.getSize()));
     }
 
-    default void updatePhotoCount(String albumId, int size) {
-        new LambdaUpdateChainWrapper<>(this)
-                .setIncrBy(Album::getPhotoCount, size)
-                .eq(Album::getId, albumId)
-                .update();
-    }
 }
 

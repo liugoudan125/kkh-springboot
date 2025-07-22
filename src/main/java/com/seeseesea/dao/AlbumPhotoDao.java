@@ -41,5 +41,12 @@ public interface AlbumPhotoDao extends BaseMapper<AlbumPhoto> {
                 .orderByDesc(AlbumPhoto::getCreatedAt)
                 .page(Page.of(request.getCurrent(), request.getSize()));
     }
+
+    default boolean existsByAlbumIdAndImageUrl(String albumId, String ossUrl) {
+        return new LambdaQueryChainWrapper<>(this)
+                .eq(AlbumPhoto::getAlbumId, albumId)
+                .eq(AlbumPhoto::getImageUrl, ossUrl)
+                .exists();
+    }
 }
 

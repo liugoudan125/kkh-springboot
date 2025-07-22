@@ -3,6 +3,7 @@ package com.seeseesea.dao;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.seeseesea.model.SysFile;
 import com.seeseesea.model.request.SysFileRequest;
@@ -125,5 +126,12 @@ public interface SysFileDao extends BaseMapper<SysFile> {
                 .eq(Objects.nonNull(request.getUploadAt()), SysFile::getUploadAt, request.getUploadAt());
     }
 
+    default SysFile selectByDigestAndSize(String fileDigest, long fileSize) {
+        return new LambdaQueryChainWrapper<>(this)
+                .eq(SysFile::getFileDigest, fileDigest)
+                .eq(SysFile::getFileSize, fileSize)
+                .last("LIMIT 1")
+                .one();
+    }
 }
 

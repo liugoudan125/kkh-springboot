@@ -1,6 +1,6 @@
 package com.seeseesea.service.impl;
 
-import com.seeseesea.core.config.S3Properties;
+import com.seeseesea.core.config.OssProperties;
 import com.seeseesea.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,13 +29,13 @@ import java.time.Duration;
 public class S3ServiceImpl implements S3Service {
 
     private final S3Client s3Client;
-    private final S3Properties s3Properties;
+    private final OssProperties ossProperties;
 
     @Override
     public String uploadFile(MultipartFile file, String key) {
         try {
             PutObjectRequest putObjectRequest = PutObjectRequest.builder()
-                    .bucket(s3Properties.getBucket())
+                    .bucket(ossProperties.getBucket())
                     .key(key)
                     .contentType(file.getContentType())
                     .build();
@@ -53,7 +53,7 @@ public class S3ServiceImpl implements S3Service {
     public String uploadFile(InputStream inputStream, String key, String contentType) {
         try {
             PutObjectRequest putObjectRequest = PutObjectRequest.builder()
-                    .bucket(s3Properties.getBucket())
+                    .bucket(ossProperties.getBucket())
                     .key(key)
                     .contentType(contentType)
                     .build();
@@ -71,7 +71,7 @@ public class S3ServiceImpl implements S3Service {
     @Override
     public void deleteFile(String key) {
         DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
-                .bucket(s3Properties.getBucket())
+                .bucket(ossProperties.getBucket())
                 .key(key)
                 .build();
 
@@ -81,18 +81,18 @@ public class S3ServiceImpl implements S3Service {
 
     @Override
     public String getFileUrl(String key) {
-        if (StringUtils.isNotBlank(s3Properties.getCdnHost())) {
-            return s3Properties.getCdnHost() + "/" + key;
+        if (StringUtils.isNotBlank(ossProperties.getCdnHost())) {
+            return ossProperties.getCdnHost() + "/" + key;
         }
         // 如果配置了自定义endpoint，使用预签名URL
-        if (StringUtils.isNotBlank(s3Properties.getEndpoint())) {
+        if (StringUtils.isNotBlank(ossProperties.getEndpoint())) {
             return generatePresignedUrl(key);
         }
 
         // 否则使用标准的S3 URL格式
         return String.format("https://%s.s3.%s.amazonaws.com/%s",
-                s3Properties.getBucket(),
-                s3Properties.getRegion(),
+                ossProperties.getBucket(),
+                ossProperties.getRegion(),
                 key);
     }
 
@@ -108,7 +108,7 @@ public class S3ServiceImpl implements S3Service {
                 .build()) {
 
             GetObjectRequest getObjectRequest = GetObjectRequest.builder()
-                    .bucket(s3Properties.getBucket())
+                    .bucket(ossProperties.getBucket())
                     .key(key)
                     .build();
 

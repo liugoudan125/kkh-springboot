@@ -56,18 +56,6 @@ public class Album {
     private String authorId;
 
     /**
-     * 照片数量
-     **/
-    @TableField(value = "photo_count")
-    private Integer photoCount;
-
-    /**
-     * 浏览次数
-     **/
-    @TableField(value = "view_count")
-    private Long viewCount;
-
-    /**
      * 状态：active-启用，inactive-禁用
      **/
     @TableField(value = "status")

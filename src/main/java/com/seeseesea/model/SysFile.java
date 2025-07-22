@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
  * (SysFile)表实体类
  *
  * @author liuchenglong
- * @since 2025-07-03 16:23:56
+ * @since 2025-07-22 21:35:19
  */
 @Setter
 @Getter
@@ -39,6 +39,12 @@ public class SysFile {
      **/
     @TableField(value = "file_size")
     private Long fileSize;
+
+    /**
+     * 文件唯一标识（MD5或SHA256）
+     **/
+    @TableField(value = "file_digest")
+    private String fileDigest;
 
     /**
      * 文件类型（如 image/jpeg,application/pdf）

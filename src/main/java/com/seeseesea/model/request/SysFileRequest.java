@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
  * (SysFile)表实体类
  *
  * @author liuchenglong
- * @since 2025-07-17 22:58:30
+ * @since 2025-07-22 21:36:06
  */
 @Setter
 @Getter
@@ -34,6 +34,10 @@ public class SysFileRequest {
      * 文件大小（字节）
      **/
     private Long fileSize;
+    /**
+     * 文件唯一标识（MD5或SHA256）
+     **/
+    private String fileDigest;
     /**
      * 文件类型（如 image/jpeg,application/pdf）
      **/
@@ -53,7 +57,7 @@ public class SysFileRequest {
     /**
      * 上传者用户ID
      **/
-    private Long uploadUserId;
+    private String uploadUserId;
     /**
      * 文件上传时间
      **/

@@ -31,6 +31,5 @@ oss:
     region: ${oss.region:us-east-1}
     endpoint: https://s3.cn-east-1.qiniucs.com
     bucket: kkh
-    path: dev
     forcePathStyle: false
     cdn-host: https://oss.seeseesea.com
