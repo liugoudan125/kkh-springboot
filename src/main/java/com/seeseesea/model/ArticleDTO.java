@@ -95,10 +95,6 @@ public class ArticleDTO {
      **/
     private Integer isTop;
 
-    /**
-     * 是否推荐：0-否，1-是
-     **/
-    private Integer isRecommend;
 
     /**
      * 是否允许评论：0-否，1-是

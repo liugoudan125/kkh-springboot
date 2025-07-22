@@ -109,11 +109,6 @@ public class Article {
     @TableField(value = "is_top")
     private Integer isTop;
 
-    /**
-     * 是否推荐：0-否，1-是
-     **/
-    @TableField(value = "is_recommend")
-    private Integer isRecommend;
 
     /**
      * 是否允许评论：0-否，1-是
@@ -139,5 +134,14 @@ public class Article {
     @TableField(value = "updated_at", fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updatedAt;
 
+
+    public interface Status {
+        // 草稿
+        String DRAFT = "draft";
+        // 已发布
+        String PUBLISHED = "published";
+        // 已归档
+        String ARCHIVED = "archived";
+    }
 }
 
