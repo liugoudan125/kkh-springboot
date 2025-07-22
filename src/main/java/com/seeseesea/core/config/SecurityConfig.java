@@ -55,7 +55,7 @@ public class SecurityConfig {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry -> {
                     registry.requestMatchers("/sys/login/**", "/sys/register/**", "/sys/logout", "/actuator/**", "/druid/**").permitAll()
-                            .requestMatchers("/*/admin/**").hasRole("admin")
+                            .requestMatchers("/*/admin/**").hasRole("ADMIN")
                             .requestMatchers(HttpMethod.POST).hasAnyRole("ADMIN", "USER")
                             .requestMatchers(HttpMethod.PUT).hasAnyRole("ADMIN", "USER")
                             .requestMatchers(HttpMethod.DELETE).hasAnyRole("ADMIN", "USER")
