@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class DemoController {
 
 
-    @PreAuthorize("hasAnyRole('admin')")
     @GetMapping("one")
     public BaseResponse<String> one() {
         return BaseResponse.ok("one");

@@ -74,9 +74,8 @@ VALUES ('019818d0-2455-7cd0-8d78-87fedea184f4', '019818d0-238f-76bd-aa6d-22c2553
         NOW(), NOW());
 
 INSERT INTO `sys_role` (`id`, `name`, `code`, `description`, `created_at`, `updated_at`)
-values ('0198322d-668c-71c7-9517-cb4ee4905478', '管理员', 'admin', '系统管理员角色，拥有所有权限', NOW(), NOW()),
-       ('0198322d-668c-71c7-9517-cb4ee4905479', '用户', 'user', '普通访客角色，权限受限', NOW(), NOW()),
-       ('0198322d-668c-71c7-9517-cb4ee4905480', '访客', 'guest', '未登录用户角色，权限最小', NOW(), NOW());
+values ('0198322d-668c-71c7-9517-cb4ee4905478', '管理员', 'ADMIN', '系统管理员角色，拥有所有权限', NOW(), NOW()),
+       ('0198322d-668c-71c7-9517-cb4ee4905479', '用户', 'USER', '普通访客角色，权限受限', NOW(), NOW());
 
 INSERT INTO `sys_user_role` (`id`, `user_id`, `role_id`, `created_at`, `updated_at`)
 values ('0198322d-668c-71c7-9517-cb4ee4905478', '019818d0-238f-76bd-aa6d-22c2553b050c',

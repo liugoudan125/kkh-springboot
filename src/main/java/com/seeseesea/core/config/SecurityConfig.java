@@ -14,7 +14,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -52,9 +54,12 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry -> {
-                    registry.requestMatchers("/sys/login", "/sys/register", "/sys/logout", "/actuator/**", "/druid/**")
-                            .permitAll();
-                    registry.anyRequest().permitAll();
+                    registry.requestMatchers("/sys/login/**", "/sys/register/**", "/sys/logout", "/actuator/**", "/druid/**").permitAll()
+                            .requestMatchers("/*/admin/**").hasRole("admin")
+                            .requestMatchers(HttpMethod.POST).hasAnyRole("ADMIN", "USER")
+                            .requestMatchers(HttpMethod.PUT).hasAnyRole("ADMIN", "USER")
+                            .requestMatchers(HttpMethod.DELETE).hasAnyRole("ADMIN", "USER")
+                            .requestMatchers(HttpMethod.GET).permitAll();
                 })
                 .exceptionHandling(customizer -> {
                     customizer.authenticationEntryPoint((request, response, authException) -> {

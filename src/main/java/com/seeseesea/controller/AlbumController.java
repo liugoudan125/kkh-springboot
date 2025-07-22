@@ -39,7 +39,6 @@ public class AlbumController {
     /**
      * 创建相册
      */
-    @PreAuthorize("isAuthenticated()")
     @PostMapping
     public BaseResponse<Void> add(@RequestBody @Validated(AlbumRequest.add.class) AlbumRequest request) {
         albumService.add(request);
@@ -57,7 +56,6 @@ public class AlbumController {
     /**
      * 更新相册
      */
-    @PreAuthorize("isAuthenticated()")
     @PutMapping("{id}")
     public BaseResponse<Void> update(@RequestBody AlbumRequest request, @PathVariable String id) {
         request.setId(id);
@@ -78,7 +76,6 @@ public class AlbumController {
     /**
      * 添加相片(上传相片)
      */
-    @PreAuthorize("isAuthenticated()")
     @PostMapping("{albumId}/photo")
     public BaseResponse<Void> addPhoto(@PathVariable String albumId, List<MultipartFile> files) {
         List<SysFileDTO> sysFileDTOList = sysFileService.uploadFiles(files);
@@ -89,7 +86,6 @@ public class AlbumController {
     /**
      * 删除相片
      */
-    @PreAuthorize("isAuthenticated()")
     @DeleteMapping("{albumId}/photo/{photoId}")
     public BaseResponse<Void> deletePhoto(@PathVariable String albumId, @PathVariable String photoId) {
         albumService.deletePhoto(albumId, photoId);
@@ -99,7 +95,6 @@ public class AlbumController {
     /**
      * 修改相片
      */
-    @PreAuthorize("isAuthenticated()")
     @PutMapping("{albumId}/photo/{photoId}")
     public BaseResponse<Void> updatePhoto(@PathVariable String albumId, @PathVariable String photoId, @RequestBody AlbumPhotoRequest request) {
         request.setAlbumId(albumId);
