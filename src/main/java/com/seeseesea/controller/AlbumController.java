@@ -10,7 +10,6 @@ import com.seeseesea.model.SysFileDTO;
 import com.seeseesea.service.AlbumService;
 import com.seeseesea.service.SysFileService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,7 +39,7 @@ public class AlbumController {
      * 创建相册
      */
     @PostMapping
-    public BaseResponse<Void> add(@RequestBody @Validated(AlbumRequest.add.class) AlbumRequest request) {
+    public BaseResponse<Void> create(@RequestBody @Validated(AlbumRequest.add.class) AlbumRequest request) {
         albumService.add(request);
         return BaseResponse.ok();
     }
@@ -60,6 +59,15 @@ public class AlbumController {
     public BaseResponse<Void> update(@RequestBody AlbumRequest request, @PathVariable String id) {
         request.setId(id);
         albumService.update(request);
+        return BaseResponse.ok();
+    }
+
+    /**
+     * 删除相册
+     */
+    @DeleteMapping("{id}")
+    public BaseResponse<Void> delete(@PathVariable String id) {
+        albumService.deleteAlbum(id);
         return BaseResponse.ok();
     }
 

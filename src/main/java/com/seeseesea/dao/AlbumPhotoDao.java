@@ -48,5 +48,11 @@ public interface AlbumPhotoDao extends BaseMapper<AlbumPhoto> {
                 .eq(AlbumPhoto::getImageUrl, ossUrl)
                 .exists();
     }
+
+    default void deleteByAlbumId(String albumId) {
+        new LambdaUpdateChainWrapper<>(this)
+                .eq(AlbumPhoto::getAlbumId, albumId)
+                .remove();
+    }
 }
 
