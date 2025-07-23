@@ -63,11 +63,11 @@ public class SecurityConfig {
                 })
                 .exceptionHandling(customizer -> {
                     customizer.authenticationEntryPoint((request, response, authException) -> {
-                        BaseResponse<Void> baseResponse = BaseResponse.fail(authException.getMessage()).putExtra("code", 401);
+                        BaseResponse<Void> baseResponse = BaseResponse.fail("用户未登录或登录失效，请重新登录").putExtra("code", 401).putExtra("msg", authException.getMessage());
                         writeResponse(response, baseResponse);
                     });
                     customizer.accessDeniedHandler((request, response, accessDeniedException) -> {
-                        BaseResponse<Void> baseResponse = BaseResponse.fail(accessDeniedException.getMessage()).putExtra("code", 403);
+                        BaseResponse<Void> baseResponse = BaseResponse.fail("权限不足，无法访问").putExtra("code", 403).putExtra("msg", accessDeniedException.getMessage());
                         writeResponse(response, baseResponse);
                     });
                 })

@@ -2,6 +2,8 @@ package com.seeseesea.dao;
 
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
+import com.seeseesea.core.constants.Is;
 import org.apache.ibatis.annotations.Param;
 import com.seeseesea.model.SysRole;
 import org.apache.ibatis.annotations.Mapper;
@@ -15,5 +17,10 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface SysRoleDao extends BaseMapper<SysRole> {
 
+    default SysRole getDefaultRole() {
+        return new LambdaQueryChainWrapper<>(this)
+                .eq(SysRole::getIsDefault, Is.YES)
+                .one();
+    }
 }
 

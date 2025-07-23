@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seeseesea.core.constants.LoginMethodType;
 import com.seeseesea.core.constants.RedisKeys;
 import com.seeseesea.core.utils.JsonUtils;
+import com.seeseesea.model.SysRoleDTO;
 import com.seeseesea.model.SysUserDTO;
 import com.seeseesea.model.request.RegisterRequest;
 import com.seeseesea.model.SysLoginMethod;
@@ -12,6 +13,7 @@ import com.seeseesea.model.SysLoginMethodDTO;
 import com.seeseesea.model.SysUser;
 import com.seeseesea.service.SysAuthService;
 import com.seeseesea.service.SysLoginMethodService;
+import com.seeseesea.service.SysRoleService;
 import com.seeseesea.service.SysUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -31,7 +34,7 @@ public class SysAuthServiceImpl implements SysAuthService {
 
     private final SysUserService sysUserService;
     private final SysLoginMethodService sysLoginMethodService;
-
+    private final SysRoleService sysRoleService;
     private final PasswordEncoder passwordEncoder;
 
     private final StringRedisTemplate stringRedisTemplate;
@@ -51,10 +54,13 @@ public class SysAuthServiceImpl implements SysAuthService {
             sysLoginMethod.setMethodType(LoginMethodType.EMAIL);
             sysLoginMethod.setAccessToken(passwordEncoder.encode(request.getAccessToken()));
             sysLoginMethodService.save(sysLoginMethod);
+            linkDefaultRole(sysUser.getId());
         }
     }
 
+
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void registerByUsername(RegisterRequest request) {
         SysLoginMethodDTO sysLoginMethodDTO = sysLoginMethodService.getByIdentifierAndMethodType(request.getIdentifier(), LoginMethodType.USERNAME);
         if (sysLoginMethodDTO == null) {
@@ -67,7 +73,18 @@ public class SysAuthServiceImpl implements SysAuthService {
             sysLoginMethod.setMethodType(LoginMethodType.USERNAME);
             sysLoginMethod.setAccessToken(passwordEncoder.encode(request.getAccessToken()));
             sysLoginMethodService.save(sysLoginMethod);
+            linkDefaultRole(sysUser.getId());
         }
+    }
+
+    /**
+     * 关联默认角色
+     *
+     * @param userId 用户ID
+     */
+    private void linkDefaultRole(String userId) {
+        SysRoleDTO sysRoleDTO = sysRoleService.getDefaultRole();
+        sysUserService.linkRoles(userId, List.of(sysRoleDTO.getId()));
     }
 
     @Override

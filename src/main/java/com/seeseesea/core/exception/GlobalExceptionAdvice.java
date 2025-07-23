@@ -33,11 +33,11 @@ public class GlobalExceptionAdvice {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
             log.info("用户未登录，拒绝访问: {}", e.getMessage());
-            return BaseResponse.fail("用户未登录，拒绝访问").putExtra("code", 401);
+            return BaseResponse.fail("用户未登录或登录失效，请重新登录").putExtra("code", 401).putExtra("msg", e.getMessage());
         }
         SysUserDTO sysUserDTO = (SysUserDTO) authentication.getPrincipal();
         log.info("用户权限不足 {}({}) 拒绝访问: {}", sysUserDTO.getNickname(), sysUserDTO.getId(), e.getMessage());
-        return BaseResponse.fail("用户权限不足，拒绝访问").putExtra("code", 403);
+        return BaseResponse.fail("权限不足，无法访问").putExtra("code", 403).putExtra("msg", e.getMessage());
     }
 
 

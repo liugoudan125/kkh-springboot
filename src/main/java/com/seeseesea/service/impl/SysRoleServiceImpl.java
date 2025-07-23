@@ -1,6 +1,11 @@
 package com.seeseesea.service.impl;
 
 
+import com.seeseesea.core.config.BeanConfig;
+import com.seeseesea.core.utils.BeanCopyUtils;
+import com.seeseesea.dao.SysRoleDao;
+import com.seeseesea.model.SysRole;
+import com.seeseesea.model.SysRoleDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.seeseesea.service.SysRoleService;
@@ -15,4 +20,11 @@ import com.seeseesea.service.SysRoleService;
 @Service
 public class SysRoleServiceImpl implements SysRoleService {
 
+    private final SysRoleDao sysRoleDao;
+
+    @Override
+    public SysRoleDTO getDefaultRole() {
+        SysRole sysRole = sysRoleDao.getDefaultRole();
+        return BeanCopyUtils.copy(sysRole, SysRoleDTO::new);
+    }
 }
