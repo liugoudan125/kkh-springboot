@@ -1,5 +1,7 @@
 package com.seeseesea.service;
 
+import com.seeseesea.model.SysRoleDTO;
+
 /**
  * 角色表(SysRole)业务层接口
  *
@@ -8,4 +10,5 @@ package com.seeseesea.service;
  */
 public interface SysRoleService {
 
+    SysRoleDTO getDefaultRole();
 }

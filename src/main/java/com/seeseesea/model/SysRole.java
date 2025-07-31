@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
  * 角色表(SysRole)表实体类
  *
  * @author liuchenglong
- * @since 2025-07-22 23:29:19
+ * @since 2025-07-23 09:49:57
  */
 @Setter
 @Getter
@@ -38,7 +38,7 @@ public class SysRole {
     private String name;
 
     /**
-     * 角色编码
+     * 角色名称
      **/
     @TableField(value = "code")
     private String code;
@@ -48,6 +48,12 @@ public class SysRole {
      **/
     @TableField(value = "description")
     private String description;
+
+    /**
+     * 是否默认角色：0-否，1-是
+     **/
+    @TableField(value = "is_default")
+    private Integer isDefault;
 
     /**
      * 创建时间

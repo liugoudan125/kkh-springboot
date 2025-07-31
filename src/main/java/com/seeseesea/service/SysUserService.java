@@ -20,4 +20,5 @@ public interface SysUserService {
 
     List<SysRoleDTO> listRoleByUserId(String userId);
 
+    void linkRoles(String userId, List<String> roleIds);
 }

@@ -47,6 +47,11 @@ public class SysRoleDTO implements GrantedAuthority {
     private String description;
 
     /**
+     * 是否默认角色：0-否，1-是
+     */
+    private Integer isDefault;
+
+    /**
      * 创建时间
      **/
     private LocalDateTime createdAt;

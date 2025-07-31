@@ -39,7 +39,8 @@ CREATE TABLE IF NOT EXISTS `sys_role`
     `id`          char(36)    NOT NULL COMMENT '角色ID',
     `name`        varchar(50) NOT NULL COMMENT '角色名称',
     `code`        varchar(50) NOT NULL COMMENT '角色名称',
-    `description` varchar(255) DEFAULT NULL COMMENT '角色描述',
+    `description` varchar(255)         DEFAULT NULL COMMENT '角色描述',
+    `is_default`  int         NOT NULL DEFAULT 0 COMMENT '是否默认角色：0-否，1-是',
     `created_at`  datetime    NOT NULL COMMENT '创建时间',
     `updated_at`  datetime    NOT NULL COMMENT '更新时间',
     PRIMARY KEY (`id`) USING BTREE,
@@ -73,9 +74,9 @@ VALUES ('019818d0-2455-7cd0-8d78-87fedea184f4', '019818d0-238f-76bd-aa6d-22c2553
         'admin', '$2a$10$9Ul0Zi6cgyg6dyaX9zRuMOnvoraXakqTRbjNsOyWukAaQDVdlvSQK', NULL,
         NOW(), NOW());
 
-INSERT INTO `sys_role` (`id`, `name`, `code`, `description`, `created_at`, `updated_at`)
-values ('0198322d-668c-71c7-9517-cb4ee4905478', '管理员', 'ADMIN', '系统管理员角色，拥有所有权限', NOW(), NOW()),
-       ('0198322d-668c-71c7-9517-cb4ee4905479', '用户', 'USER', '普通访客角色，权限受限', NOW(), NOW());
+INSERT INTO `sys_role` (`id`, `name`, `code`, `description`, `is_default`, `created_at`, `updated_at`)
+values ('0198322d-668c-71c7-9517-cb4ee4905478', '管理员', 'ADMIN', '系统管理员角色，拥有所有权限', 0, NOW(), NOW()),
+       ('0198322d-668c-71c7-9517-cb4ee4905479', '用户', 'USER', '普通访客角色，权限受限', 1, NOW(), NOW());
 
 INSERT INTO `sys_user_role` (`id`, `user_id`, `role_id`, `created_at`, `updated_at`)
 values ('0198322d-668c-71c7-9517-cb4ee4905478', '019818d0-238f-76bd-aa6d-22c2553b050c',

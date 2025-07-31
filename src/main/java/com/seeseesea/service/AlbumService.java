@@ -30,4 +30,6 @@ public interface AlbumService {
     void updatePhoto(AlbumPhotoRequest request);
 
     IPage<AlbumPhotoDTO> pagePhoto(AlbumPhotoRequest request);
+
+    void deleteAlbum(String id);
 }

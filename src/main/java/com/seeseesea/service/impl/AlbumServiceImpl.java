@@ -91,4 +91,13 @@ public class AlbumServiceImpl implements AlbumService {
         IPage<AlbumPhoto> page = albumPhotoDao.page(request);
         return page.convert(album -> BeanCopyUtils.copy(album, AlbumPhotoDTO::new));
     }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteAlbum(String id) {
+        //删除相册下所有相片
+        albumPhotoDao.deleteByAlbumId(id);
+        //删除相册
+        albumDao.deleteById(id);
+    }
 }
