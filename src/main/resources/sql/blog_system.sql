@@ -358,7 +358,3 @@ CREATE TABLE IF NOT EXISTS `article_view_log`
 -- 插入默认留言板
 INSERT INTO `message_board` (`id`, `name`, `description`)
 VALUES ('0198322d-668c-71c7-9517-cb4ee4905476', '默认留言板', '欢迎在这里留言交流！');
-
--- 插入默认友链分类
-INSERT INTO `friend_link` (`id`, `name`, `url`, `description`, `category`)
-VALUES ('0198322d-668c-71c7-9517-cb4ee4905477', '示例友链', 'https://example.com', '这是一个示例友链', 'default');
