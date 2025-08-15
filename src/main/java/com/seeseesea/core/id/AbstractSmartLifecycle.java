@@ -17,14 +17,12 @@ public abstract class AbstractSmartLifecycle implements SmartLifecycle {
     public void stop() {
         try {
             this.destroy();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         } finally {
             running = false;
         }
     }
 
-    protected abstract void destroy()   ;
+    protected abstract void destroy();
 
     @Override
     public boolean isRunning() {
