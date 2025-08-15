@@ -2,6 +2,7 @@ server:
   port: 8080
   tomcat:
     max-http-form-post-size: 256MB
+#  shutdown: graceful
 spring:
   profiles:
     active: dev

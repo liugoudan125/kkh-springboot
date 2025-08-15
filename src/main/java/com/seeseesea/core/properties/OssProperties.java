@@ -1,4 +1,4 @@
-package com.seeseesea.core.config;
+package com.seeseesea.core.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

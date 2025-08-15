@@ -4,8 +4,6 @@ import com.seeseesea.core.constants.RedisKeys;
 import com.seeseesea.core.response.BaseResponse;
 import com.seeseesea.core.utils.JsonUtils;
 import com.seeseesea.model.dto.SysUserDTO;
-import com.seeseesea.service.SysRoleService;
-import com.seeseesea.service.SysUserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -35,9 +33,6 @@ import java.time.Duration;
 public class SecurityConfig {
 
     private final StringRedisTemplate stringRedisTemplate;
-
-    private final SysRoleService sysRoleService;
-    private final SysUserService sysUserService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {

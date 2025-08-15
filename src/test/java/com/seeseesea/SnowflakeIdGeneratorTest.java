@@ -1,6 +1,6 @@
 package com.seeseesea;
 
-import com.seeseesea.core.utils.SnowflakeIdGenerator;
+import com.seeseesea.core.id.SnowflakeIdGenerator;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;

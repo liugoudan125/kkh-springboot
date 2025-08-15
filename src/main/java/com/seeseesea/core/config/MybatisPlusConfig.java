@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.BlockAttackInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
-import com.seeseesea.core.utils.SnowflakeIdGenerator;
+import com.seeseesea.core.id.SnowflakeIdGenerator;
 import org.apache.ibatis.reflection.MetaObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +26,7 @@ import java.util.concurrent.Executors;
 public class MybatisPlusConfig {
 
     private static final Logger log = LoggerFactory.getLogger(MybatisPlusConfig.class);
+    static ExecutorService executorService = Executors.newFixedThreadPool(16);
 
     /**
      * 添加分页插件
@@ -78,7 +79,5 @@ public class MybatisPlusConfig {
 
         };
     }
-
-    static ExecutorService executorService = Executors.newFixedThreadPool(16);
 
 }

@@ -1,6 +1,6 @@
 package com.seeseesea.service.impl;
 
-import com.seeseesea.core.config.OssProperties;
+import com.seeseesea.core.properties.OssProperties;
 import com.seeseesea.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

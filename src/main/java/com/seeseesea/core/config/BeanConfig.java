@@ -1,10 +1,9 @@
 package com.seeseesea.core.config;
 
 
-import com.seeseesea.core.utils.SnowflakeIdGenerator;
+import com.seeseesea.core.properties.OssProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.core.RedisTemplate;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
@@ -47,8 +46,4 @@ public class BeanConfig {
                 .build();
     }
 
-    @Bean(name = "idGenerator")
-    public SnowflakeIdGenerator snowflakeIdGenerator(RedisTemplate<String, Object> redisTemplate) {
-        return new SnowflakeIdGenerator(redisTemplate);
-    }
 }

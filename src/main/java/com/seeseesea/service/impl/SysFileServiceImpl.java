@@ -2,7 +2,7 @@ package com.seeseesea.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.seeseesea.core.config.OssProperties;
+import com.seeseesea.core.properties.OssProperties;
 import com.seeseesea.core.utils.BeanCopyUtils;
 import com.seeseesea.core.utils.UserUtils;
 import com.seeseesea.dao.SysFileDao;
@@ -37,10 +37,10 @@ import java.util.UUID;
 @Service
 public class SysFileServiceImpl implements SysFileService {
 
+    private final static DateTimeFormatter pathFormatter = DateTimeFormatter.ofPattern("yyyy/ww");
     private final S3Service s3Service;
     private final OssProperties ossProperties;
     private final SysFileDao sysFileDao;
-
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -94,7 +94,6 @@ public class SysFileServiceImpl implements SysFileService {
         return filePage.convert(sysFile -> BeanCopyUtils.copy(sysFile, SysFileDTO::new));
     }
 
-
     @Override
     public SysFileDTO getFileById(Long id) {
         SysFile sysFile = sysFileDao.selectById(id);
@@ -137,8 +136,6 @@ public class SysFileServiceImpl implements SysFileService {
         dtoPage.setRecords(BeanCopyUtils.copyList(resultPage.getRecords(), SysFileDTO.class));
         return dtoPage;
     }
-
-    private final static DateTimeFormatter pathFormatter = DateTimeFormatter.ofPattern("yyyy/ww");
 
     private String getFileKey(String originalFilename) {
         String extension = originalFilename != null ?
