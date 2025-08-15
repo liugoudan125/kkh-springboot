@@ -1,0 +1,36 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://seeseesea.com:3306/kkh-dev?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true&autoReconnect=true
+    username: ${db.username}
+    password: ${db.password}
+  data:
+    redis:
+      host: seeseesea.com
+      port: 6379
+      password: ${redis.password}
+  devtools:
+    restart:
+      enabled: true # 生产环境关闭
+logging:
+  level:
+    com.seeseesea: debug
+    com.alibaba.druid: debug
+    root: info
+  config: classpath:log.xml
+
+
+oss:
+  s3:
+    accessKey: ${oss.accessKey}
+    secretKey: ${oss.secretKey}
+    region: ${oss.region:us-east-1}
+    #    endpoint: http://192.168.10.120:9000
+    endpoint: https://oss.seeseesea.com
+    bucket: seeseesea
+    forcePathStyle: true
+    cdn-host: https://oss.seeseesea.com

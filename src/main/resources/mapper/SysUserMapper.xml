@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seeseesea.dao.SysUserDao">
+
+    <resultMap type="com.seeseesea.model.SysUser" id="SysUserMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="nickname" column="nickname" jdbcType="VARCHAR"/>
+        <result property="avatar" column="avatar" jdbcType="VARCHAR"/>
+        <result property="introduction" column="introduction" jdbcType="VARCHAR"/>
+        <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+        <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <select id="listRoleByUserId" resultType="com.seeseesea.model.SysRole">
+        select t2.*
+        from sys_user_role t1
+                 left join sys_role t2 on t1.role_id = t2.id
+        where t1.user_id = #{userId,jdbcType=VARCHAR}
+    </select>
+
+</mapper>
+
