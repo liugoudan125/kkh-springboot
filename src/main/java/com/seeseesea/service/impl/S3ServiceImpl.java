@@ -28,6 +28,7 @@ public class S3ServiceImpl implements S3Service {
     @Override
     public String uploadFile(MultipartFile file, String key) {
         try {
+            log.info("开始上传文件: {}, {}, {}", key, ossProperties.getBucket(), file.getContentType());
             PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                     .bucket(ossProperties.getBucket())
                     .key(key)
