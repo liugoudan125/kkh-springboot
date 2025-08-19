@@ -1,8 +1,7 @@
 FROM amazoncorretto:21
 LABEL authors="lcl94"
-RUN mkdir /app
-WORKDIR /app
-COPY target/*.jar /app/app.jar
+WORKDIR /root
+COPY target/*.jar /root/app.jar
 EXPOSE 8080
 ENV JAVA_OPTS="-Xmx256m -Xms256m -Xmn192m -XX:+UseZGC -XX:MaxGCPauseMillis=200 -XX:ParallelGCThreads=1 -XX:ConcGCThreads=1"
-CMD ["sh", "-c", "java $JAVA_OPTS -jar /app/app.jar"]
+CMD ["sh", "-c", "java $JAVA_OPTS -jar /root/app.jar"]
