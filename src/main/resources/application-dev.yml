@@ -34,3 +34,8 @@ oss:
     bucket: seeseesea
     forcePathStyle: true
     cdn-host: https://oss.seeseesea.com
+
+aws:
+  sdk:
+    logging:
+      level: debug
