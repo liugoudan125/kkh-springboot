@@ -47,6 +47,7 @@ public class SysFileServiceImpl implements SysFileService {
         try {
             List<SysFile> sysFiles = new ArrayList<>();
             for (MultipartFile file : files) {
+                log.info("文件:{} 正在上传...", file.getOriginalFilename());
                 String originalFilename = file.getOriginalFilename();
                 String fileDigest = DigestUtils.md5DigestAsHex(file.getBytes());
                 long fileSize = file.getSize();
@@ -80,8 +81,8 @@ public class SysFileServiceImpl implements SysFileService {
             sysFileDao.insert(sysFiles);
             return BeanCopyUtils.copyList(sysFiles, SysFileDTO.class);
         } catch (Exception e) {
-            log.error("上传文件失败,{}", files.stream().map(MultipartFile::getName).toList(), e);
-            throw new RuntimeException("上传文件失败");
+            log.error("上传文件失败,{}", files.stream().map(MultipartFile::getName).toList());
+            throw new RuntimeException("上传文件失败", e);
         }
     }
 
