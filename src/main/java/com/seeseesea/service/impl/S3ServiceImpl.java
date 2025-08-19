@@ -2,6 +2,7 @@ package com.seeseesea.service.impl;
 
 import com.seeseesea.core.properties.OssProperties;
 import com.seeseesea.service.S3Service;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -24,6 +25,11 @@ public class S3ServiceImpl implements S3Service {
 
     private final S3Client s3Client;
     private final OssProperties ossProperties;
+
+    @PostConstruct
+    public void init() {
+        log.info("S3服务初始化完成，ossProperties: {}", ossProperties);
+    }
 
     @Override
     public String uploadFile(MultipartFile file, String key) {
