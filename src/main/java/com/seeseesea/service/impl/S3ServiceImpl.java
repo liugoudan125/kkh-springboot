@@ -2,7 +2,6 @@ package com.seeseesea.service.impl;
 
 import com.seeseesea.core.properties.OssProperties;
 import com.seeseesea.service.S3Service;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -12,8 +11,6 @@ import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
-
-import java.io.IOException;
 
 /**
  * S3服务实现类
@@ -26,10 +23,6 @@ public class S3ServiceImpl implements S3Service {
     private final S3Client s3Client;
     private final OssProperties ossProperties;
 
-    @PostConstruct
-    public void init() {
-        log.info("S3服务初始化完成，ossProperties: {}", ossProperties);
-    }
 
     @Override
     public String uploadFile(MultipartFile file, String key) {
@@ -44,7 +37,7 @@ public class S3ServiceImpl implements S3Service {
             s3Client.putObject(putObjectRequest, RequestBody.fromBytes(file.getBytes()));
             log.info("文件上传成功: {}", key);
             return getFileUrl(key);
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.error("文件上传失败: {}", key);
             throw new RuntimeException("文件上传失败", e);
         }
