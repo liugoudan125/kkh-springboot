@@ -1,7 +1,6 @@
 package com.seeseesea.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.seeseesea.core.properties.OssProperties;
 import com.seeseesea.core.utils.BeanCopyUtils;
 import com.seeseesea.core.utils.UserUtils;
@@ -121,21 +120,6 @@ public class SysFileServiceImpl implements SysFileService {
         return result > 0;
     }
 
-    /**
-     * 转换 Page<SysFile> 为 Page<SysFileDTO>
-     *
-     * @param resultPage 原始分页结果
-     * @return DTO 分页结果
-     */
-    private Page<SysFileDTO> convertToPageDTO(Page<SysFile> resultPage) {
-        Page<SysFileDTO> dtoPage = new Page<>();
-        dtoPage.setCurrent(resultPage.getCurrent());
-        dtoPage.setSize(resultPage.getSize());
-        dtoPage.setTotal(resultPage.getTotal());
-        dtoPage.setPages(resultPage.getPages());
-        dtoPage.setRecords(BeanCopyUtils.copyList(resultPage.getRecords(), SysFileDTO.class));
-        return dtoPage;
-    }
 
     private String getFileKey(String originalFilename) {
         String extension = originalFilename != null ?
