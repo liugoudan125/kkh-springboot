@@ -80,7 +80,7 @@ public class SysFileServiceImpl implements SysFileService {
             sysFileDao.insert(sysFiles);
             return BeanCopyUtils.copyList(sysFiles, SysFileDTO.class);
         } catch (Exception e) {
-            log.error("上传文件失败,{}", files.stream().map(MultipartFile::getName).toList());
+            log.error("上传文件失败,{}", files.stream().map(MultipartFile::getOriginalFilename).toList());
             throw new RuntimeException("上传文件失败", e);
         }
     }
